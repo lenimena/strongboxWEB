@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050805">
+<meta name="description" content="STRONGBOX - juego HTML5 de descubrir claves secretas.">
+<title>STRONGBOX · Descubre la clave</title>
+<link rel="stylesheet" href="styles.css">
+<!-- CrazyGames SDK v3 -->
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="session"><span>PROGRESO</span><strong id="session-status">Nivel 1</strong></div>
+</header>
+
+<main>
+<section id="home" class="view active home-screen">
+  <div class="home-backdrop" aria-hidden="true">
+    <div class="vault-door"></div>
+    <div class="vault-glow"></div>
+    <div class="coin coin-a"></div><div class="coin coin-b"></div><div class="coin coin-c"></div>
+  </div>
+
+  <div class="home-content">
+    <div class="home-top">
+      <div></div>
+      <div class="coin-counter"><img src="assets/moneda.svg" alt=""><div><small>TUS CLICCOINS</small><b id="home-balance">0</b></div></div>
+    </div>
+
+    <div class="home-actions">
+      <button id="play-home" class="play-button" type="button"><span class="play-triangle">▶</span><span>JUGAR</span></button>
+      <p>Tu desafío comienza en el Nivel <b id="home-level">1</b></p>
+    </div>
+
+    <div class="prize-row" aria-label="Premios">
+      <div class="home-prize"><img src="assets/saco-dinero.png" alt="Dinero"><span>DINERO</span></div>
+      <div class="home-prize"><img src="assets/lingote-plata.png" alt="Plata"><span>PLATA</span></div>
+      <div class="home-prize"><img src="assets/lingote-oro.png" alt="Oro"><span>ORO</span></div>
+      <div class="home-prize"><img src="assets/esmeraldas.png" alt="Esmeraldas"><span>ESMERALDAS</span></div>
+      <div class="home-prize"><img src="assets/diamante.png" alt="Diamante"><span>DIAMANTE</span></div>
+    </div>
+
+    <div class="home-features">
+      <div><b>▦</b><span>TABLERO<br>4×4</span></div>
+      <div><b>⌕</b><span>CLAVES<br>2, 3, 4 Y 5 CIFRAS</span></div>
+      <div><b>◷</b><span>TIEMPO<br>EN CADA NIVEL</span></div>
+      <div><b>★</b><span>BONIFICACIONES<br>ESPECIALES</span></div>
+      <div><b>▥</b><span>PROGRESO<br>Y RÉCORD</span></div>
+    </div>
+
+    <div class="home-progress"><span>NIVEL ACTUAL</span><b id="home-level-progress">1 / 50</b><i></i></div>
+  </div>
+</section>
+
+<section id="game" class="view">
+  <button class="back" data-back>← Salir</button>
+  <div class="game-head">
+    <div class="game-title-area">
+      <p class="eyebrow" id="game-mode">NIVEL 1 · 55 SEGUNDOS</p>
+      <h2>Descubre la clave</h2>
+      <div class="target-box"><span>CLAVE SECRETA</span><b id="target-number">---</b></div>
+    </div>
+
+    <div class="game-block-info">
+      <img id="game-block-icon" src="assets/saco-dinero.png" alt="Premio del bloque">
+      <div><span id="game-block-label">BLOQUE 1</span><b id="game-block-title">SACO DE DINERO</b></div>
+    </div>
+
+    <div class="game-side">
+      <div class="timer-box"><span>TIEMPO</span><b id="game-timer">00:55</b></div>
+      <div class="balance"><span>ClicCoin</span><b id="balance">0</b></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div><span>Intentos</span><b id="attempts">0</b></div>
+    <div><span>Casillas</span><b>16</b></div>
+    <div><span>Estado</span><b id="game-status">Buscando</b></div>
+  </div>
+  <p id="game-reward" class="game-reward"></p>
+  <div class="board-shell">
+    <div id="board" class="board" aria-label="Tablero Strongbox 4 por 4"></div>
+  </div>
+</section>
+</main>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-view="home"><span>🎮</span><small>Jugar</small></button>
+  <button class="nav-btn" data-view="account"><span>☰</span><small>Progreso</small></button>
+</nav>
+
+<section id="account" class="view">
+  <div class="section-heading"><p class="eyebrow">PROGRESO LOCAL</p><h2>Tu partida</h2><p>Estos datos se almacenan únicamente en el navegador del jugador.</p></div>
+  <div class="info-card">
+    <div><span>Nivel actual</span><b id="account-level">1 / 50</b></div>
+    <div><span>ClicCoin</span><b id="account-balance">0</b></div>
+    <div><span>Récord</span><b id="account-best">0</b></div>
+  </div>
+  <button id="reset-progress-2" class="danger-btn">BORRAR PROGRESO LOCAL</button>
+</section>
+
+<div id="modal" class="modal">
+  <div class="modal-card">
+    <div class="win-icon" id="modal-icon">🪙</div>
+    <p class="eyebrow" id="modal-eyebrow">NIVEL SUPERADO</p>
+    <h2 id="modal-title">¡Ganaste!</h2>
+    <p id="modal-text"></p>
+    <strong id="modal-balance">0 ClicCoin</strong>
+    <button id="modal-action" class="primary-btn">CONTINUAR</button>
+  </div>
+</div>
+
+<div id="leave-modal" class="modal">
+  <div class="modal-card confirm-card">
+    <div class="win-icon">⚠️</div>
+    <p class="eyebrow">PARTIDA EN CURSO</p>
+    <h2>¿Quieres abandonar?</h2>
+    <p>Si sales ahora, perderás el progreso de esta partida.</p>
+    <div class="confirm-actions">
+      <button id="stay-game" class="ghost-btn">SEGUIR JUGANDO</button>
+      <button id="confirm-leave" class="danger-btn">ABANDONAR</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
